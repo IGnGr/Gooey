@@ -3,6 +3,8 @@ import sys
 import textwrap
 
 import os
+from wx import SystemSettings
+
 from typing import List
 
 from gooey.python_bindings.constants import Events
@@ -50,6 +52,9 @@ def gooey_params(**kwargs) -> GooeyParams:
     """
     Builds the full GooeyParams object from an arbitrary subset of supplied values
     """
+    use_dark_mode = SystemSettings.GetAppearance().IsUsingDarkBackground()
+    default_text_color  = constants.COLOR_WHITE if use_dark_mode else constants.COLOR_BLACK
+
     return GooeyParams(**{  # type: ignore
         'show_preview_warning': kwargs.get('show_preview_warning', True),
         'language': kwargs.get('language', 'english'),
@@ -112,22 +117,25 @@ def gooey_params(**kwargs) -> GooeyParams:
         'group_by_type': kwargs.get('group_by_type', True),
 
 
-        'body_bg_color': kwargs.get('body_bg_color', '#f0f0f0'),
-        'header_bg_color': kwargs.get('header_bg_color', '#ffffff'),
+        'body_bg_color': kwargs.get('body_bg_color', constants.COLOR_GREY_90 if use_dark_mode else constants.COLOR_GREY_5),
+        'body_text_color': kwargs.get('body_text_color', default_text_color),
+        'header_bg_color': kwargs.get('header_bg_color', constants.COLOR_GREY_100 if use_dark_mode else constants.COLOR_WHITE),
         'header_height': kwargs.get('header_height', 90),
+        'header_text_color': kwargs.get('header_text_color', default_text_color),
         'header_show_title': kwargs.get('header_show_title', True),
         'header_show_subtitle': kwargs.get('header_show_subtitle', True),
         'header_image_center': kwargs.get('header_image_center', False),
-        'footer_bg_color': kwargs.get('footer_bg_color', '#f0f0f0'),
-        'sidebar_bg_color': kwargs.get('sidebar_bg_color', '#f2f2f2'),
+        'footer_bg_color': kwargs.get('footer_bg_color', constants.COLOR_GREY_90 if use_dark_mode else constants.COLOR_GREY_5),
+        'sidebar_bg_color': kwargs.get('sidebar_bg_color', constants.COLOR_GREY_90 if use_dark_mode else constants.COLOR_GREY_5),
 
-        'terminal_panel_color': kwargs.get('terminal_panel_color', '#F0F0F0'),
-        'terminal_font_color': kwargs.get('terminal_font_color', '#000000'),
+        'terminal_panel_color': kwargs.get('terminal_panel_color', constants.COLOR_GREY_80 if use_dark_mode else constants.COLOR_GREY_10),
+        'terminal_font_color':  kwargs.get('terminal_font_color', default_text_color),
         'terminal_font_family': kwargs.get('terminal_font_family', None),
         'terminal_font_weight': _get_font_weight(kwargs),
         'terminal_font_size': kwargs.get('terminal_font_size', None),
         'richtext_controls': kwargs.get('richtext_controls', False),
         'error_color': kwargs.get('error_color', '#ea7878'),
+        'use_dark_mode': use_dark_mode,
         # TODO: remove. Only useful for testing
         'cli': kwargs.get('cli', sys.argv),
     })
