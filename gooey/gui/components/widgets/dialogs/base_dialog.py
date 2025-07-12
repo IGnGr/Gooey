@@ -3,7 +3,6 @@ from gooey.gui.lang.i18n import _
 import wx  # type: ignore
 
 from gooey.gui.three_to_four import Constants
-from gooey.python_bindings import constants
 
 
 class BaseDialog(wx.Dialog):
@@ -13,8 +12,7 @@ class BaseDialog(wx.Dialog):
   def __init__(self, parent, pickerClass, pickerGetter, localizedPickerLabel):
     wx.Dialog.__init__(self, parent, title=localizedPickerLabel)
 
-    use_dark_mode = wx.SystemSettings.GetAppearance().IsUsingDarkBackground()
-    self.SetBackgroundColour(constants.COLOR_GREY_90 if use_dark_mode else constants.COLOR_GREY_5)
+    self.SetBackgroundColour('#ffffff')
 
     self.ok_button = wx.Button(self, wx.ID_OK, label=_('ok'))
     self.picker = pickerClass(self, style=Constants.WX_DP_DROPDOWN)
