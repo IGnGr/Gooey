@@ -143,7 +143,7 @@ class MultiDirChooser(Chooser):
                 if path:
                     parts = path.split(os.sep)
                     vol = parts[0]
-                    drives = re.match(r'.*\((?P<drive>\w:)\)', vol)
+                    drives = re.match(r'.*(?P<drive>\w:)', vol)
                     paths[i] = os.sep.join([drives.group('drive')] + parts[1:])
 
         return os.pathsep.join(paths)
