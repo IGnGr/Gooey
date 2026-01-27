@@ -12,6 +12,7 @@ class Timing(object):
         self.estimatedRemaining = None
         self.wxTimer = wx.Timer(parent)
         self.parent = parent
+        self.prog = 0
         parent.Bind(wx.EVT_TIMER, self.publishTime, self.wxTimer)
 
         pub.subscribe(events.PROGRESS_UPDATE, self._updateEstimate)
@@ -22,6 +23,7 @@ class Timing(object):
             self.estimatedRemaining = None
             return
         if(prog > 0):
+            self.prog = prog
             self.estimatedRemaining = estimate_time_remaining(prog,self.startTime)
 
     def publishTime(self, *args, **kwargs):

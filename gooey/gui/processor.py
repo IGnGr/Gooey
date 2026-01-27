@@ -47,6 +47,7 @@ class ProcessController(object):
         self.shell_execution = shell
         self.shutdown_signal = shutdown_signal
         self.testMode = testmode
+        self.result = 0
 
     def was_success(self):
         self._process.communicate()
@@ -136,9 +137,11 @@ class ProcessController(object):
         # monad-ish dispatch to avoid the if/else soup
         find = partial(re.search, string=text.strip().decode(self.encoding))
         regex = unit(self.progress_regex)
-        match = bind(regex, find)
-        result = bind(match, self._calculate_progress)
-        return result
+        if regex:
+            match = bind(regex, find)
+            if match:
+                self.result = bind(match, self._calculate_progress)
+        return self.result
 
     def _calculate_progress(self, match):
         '''
